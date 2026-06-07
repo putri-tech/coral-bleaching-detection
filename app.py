@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 import os
+import urllib.request
 
 # ==========================================
 # KONFIGURASI HALAMAN
@@ -18,13 +19,21 @@ st.set_page_config(
 # LOAD MODEL
 # ==========================================
 
-model = None
+MODEL_PATH = "coral_model.keras"
 
-if os.path.exists("coral_model.keras"):
-    model = tf.keras.models.load_model(
-        "coral_model.keras",
-        compile=False
+if not os.path.exists(MODEL_PATH):
+
+    st.info("Mengunduh model...")
+
+    urllib.request.urlretrieve(
+        "https://huggingface.co/putriri/coral-model/resolve/main/coral_model.keras",
+        MODEL_PATH
     )
+
+model = tf.keras.models.load_model(
+    MODEL_PATH,
+    compile=False
+)
 
 # ==========================================
 # PREPROCESSING
